@@ -16,8 +16,8 @@ public class BaseDdlHandlerTest {
 
     handler.generate(write, Helper.getAddColumn());
 
-    assertThat(write.apply().getBuffer()).isEqualTo("alter table foo add column added_to_foo varchar(20);\n");
-    assertThat(write.rollback().getBuffer()).isEqualTo("alter table foo drop column added_to_foo;\n");
+    assertThat(write.apply().getBuffer()).isEqualTo("alter table foo add column added_to_foo varchar(20);\n\n");
+    assertThat(write.rollback().getBuffer()).isEqualTo("alter table foo drop column added_to_foo;\n\n");
   }
 
   @Test
@@ -28,7 +28,7 @@ public class BaseDdlHandlerTest {
 
     handler.generate(write, Helper.getDropColumn());
 
-    assertThat(write.apply().getBuffer()).isEqualTo("alter table foo drop column col2;\n");
+    assertThat(write.apply().getBuffer()).isEqualTo("alter table foo drop column col2;\n\n");
     assertThat(write.rollback().getBuffer()).isEqualTo("");
   }
 
@@ -44,7 +44,7 @@ public class BaseDdlHandlerTest {
     String createTableDDL = Helper.asText(this, "/assert/create-table.txt");
 
     assertThat(write.apply().getBuffer()).isEqualTo(createTableDDL);
-    assertThat(write.rollback().getBuffer()).isEqualTo("drop table foo;\n");
+    assertThat(write.rollback().getBuffer()).isEqualTo("drop table foo;\n\n");
   }
 
   @Test

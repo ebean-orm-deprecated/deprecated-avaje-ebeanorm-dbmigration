@@ -4,3 +4,4 @@ create table foo (
   col3                          varchar(30) non null
 );
 alter table foo add primary key pk_foo (col1);
+
