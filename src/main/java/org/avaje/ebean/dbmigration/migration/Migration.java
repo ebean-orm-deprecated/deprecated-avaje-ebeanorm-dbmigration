@@ -33,10 +33,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "changeSet"
 })
-@XmlRootElement(name = "migration", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
+@XmlRootElement(name = "migration")
 public class Migration {
 
-    @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
+    @XmlElement(required = true)
     protected List<ChangeSet> changeSet;
 
     /**

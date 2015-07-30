@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{http://ebean-orm.github.io/xml/ns/dbmigration}column" maxOccurs="unbounded"/>
+ *         &lt;element ref="{http://ebean-orm.github.io/xml/ns/dbmigration}uniqueConstraint" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attGroup ref="{http://ebean-orm.github.io/xml/ns/dbmigration}tablespaceAttributes"/>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -35,13 +36,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "column"
+    "column",
+    "uniqueConstraint"
 })
-@XmlRootElement(name = "createTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
+@XmlRootElement(name = "createTable")
 public class CreateTable {
 
-    @XmlElement(namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", required = true)
+    @XmlElement(required = true)
     protected List<Column> column;
+    protected List<UniqueConstraint> uniqueConstraint;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "withHistory")
@@ -80,6 +83,35 @@ public class CreateTable {
             column = new ArrayList<Column>();
         }
         return this.column;
+    }
+
+    /**
+     * Gets the value of the uniqueConstraint property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the uniqueConstraint property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getUniqueConstraint().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link UniqueConstraint }
+     * 
+     * 
+     */
+    public List<UniqueConstraint> getUniqueConstraint() {
+        if (uniqueConstraint == null) {
+            uniqueConstraint = new ArrayList<UniqueConstraint>();
+        }
+        return this.uniqueConstraint;
     }
 
     /**

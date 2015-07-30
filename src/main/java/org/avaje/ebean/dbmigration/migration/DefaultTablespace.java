@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "defaultTablespace", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
+@XmlRootElement(name = "defaultTablespace")
 public class DefaultTablespace {
 
     @XmlAttribute(name = "tables")

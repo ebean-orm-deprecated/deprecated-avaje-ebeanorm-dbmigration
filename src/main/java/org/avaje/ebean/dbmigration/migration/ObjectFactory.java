@@ -62,6 +62,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UniqueConstraint }
+     * 
+     */
+    public UniqueConstraint createUniqueConstraint() {
+        return new UniqueConstraint();
+    }
+
+    /**
      * Create an instance of {@link Apply }
      * 
      */
@@ -86,19 +94,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateDropHistoryTable }
-     * 
-     */
-    public CreateDropHistoryTable createCreateDropHistoryTable() {
-        return new CreateDropHistoryTable();
-    }
-
-    /**
      * Create an instance of {@link RenameTable }
      * 
      */
     public RenameTable createRenameTable() {
         return new RenameTable();
+    }
+
+    /**
+     * Create an instance of {@link DropHistoryTable }
+     * 
+     */
+    public DropHistoryTable createDropHistoryTable() {
+        return new DropHistoryTable();
     }
 
     /**

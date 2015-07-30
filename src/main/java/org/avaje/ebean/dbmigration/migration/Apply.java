@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "", propOrder = {
     "value"
 })
-@XmlRootElement(name = "apply", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
+@XmlRootElement(name = "apply")
 public class Apply {
 
     @XmlValue

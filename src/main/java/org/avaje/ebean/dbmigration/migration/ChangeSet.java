@@ -41,22 +41,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "changeSetChildren"
 })
-@XmlRootElement(name = "changeSet", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration")
+@XmlRootElement(name = "changeSet")
 public class ChangeSet {
 
     @XmlElements({
-        @XmlElement(name = "configuration", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = Configuration.class),
-        @XmlElement(name = "sql", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = Sql.class),
-        @XmlElement(name = "createTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = CreateTable.class),
-        @XmlElement(name = "dropTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropTable.class),
-        @XmlElement(name = "renameTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = RenameTable.class),
-        @XmlElement(name = "createHistoryTable", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = CreateHistoryTable.class),
-        @XmlElement(name = "createView", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = CreateView.class),
-        @XmlElement(name = "dropView", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropView.class),
-        @XmlElement(name = "renameView", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = RenameView.class),
-        @XmlElement(name = "addColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = AddColumn.class),
-        @XmlElement(name = "dropColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = DropColumn.class),
-        @XmlElement(name = "renameColumn", namespace = "http://ebean-orm.github.io/xml/ns/dbmigration", type = RenameColumn.class)
+        @XmlElement(name = "configuration", type = Configuration.class),
+        @XmlElement(name = "sql", type = Sql.class),
+        @XmlElement(name = "createTable", type = CreateTable.class),
+        @XmlElement(name = "dropTable", type = DropTable.class),
+        @XmlElement(name = "renameTable", type = RenameTable.class),
+        @XmlElement(name = "createHistoryTable", type = CreateHistoryTable.class),
+        @XmlElement(name = "createView", type = CreateView.class),
+        @XmlElement(name = "dropView", type = DropView.class),
+        @XmlElement(name = "renameView", type = RenameView.class),
+        @XmlElement(name = "addColumn", type = AddColumn.class),
+        @XmlElement(name = "dropColumn", type = DropColumn.class),
+        @XmlElement(name = "renameColumn", type = RenameColumn.class)
     })
     protected List<Object> changeSetChildren;
     @XmlAttribute(name = "id", required = true)

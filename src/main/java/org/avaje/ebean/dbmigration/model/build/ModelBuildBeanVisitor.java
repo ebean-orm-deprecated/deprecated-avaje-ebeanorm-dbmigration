@@ -50,12 +50,9 @@ public class ModelBuildBeanVisitor implements BeanVisitor {
 
     CompoundUniqueContraint[] compoundUniqueConstraints = descriptor.getCompoundUniqueConstraints();
     if (compoundUniqueConstraints != null) {
-      //TODO CompoundUniqueContraint
-//      String table = descriptor.getBaseTable();
-//      for (int i = 0; i < compoundUniqueConstraints.length; i++) {
-//        String constraint = createUniqueConstraint(table, i, compoundUniqueConstraints[i]);
-//        ctx.write("  ").write(constraint).write(",").writeNewLine();
-//      }
+      for (int i = 0; i < compoundUniqueConstraints.length; i++) {
+        table.addCompoundUniqueConstraint(compoundUniqueConstraints[i].getColumns());
+      }
     }
 
     return new ModelBuildPropertyVisitor(ctx, table);

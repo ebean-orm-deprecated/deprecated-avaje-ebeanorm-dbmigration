@@ -5,7 +5,7 @@ import org.avaje.ebean.dbmigration.migration.Column;
 import org.avaje.ebean.dbmigration.migration.CreateTable;
 import org.avaje.ebean.dbmigration.migration.DropColumn;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +43,8 @@ public class MTable {
   private Boolean withHistory;
 
   private Map<String,MColumn> columns = new LinkedHashMap<>();
+
+  private List<MCompoundUniqueConstraint> compoundUniqueConstraints = new ArrayList<>();
 
   /**
    * Construct for migration.
@@ -151,4 +153,10 @@ public class MTable {
     columns.put(column.getName(), column);
   }
 
+  /**
+   * Add a compound unique constraint.
+   */
+  public void addCompoundUniqueConstraint(String[] columns) {
+   compoundUniqueConstraints.add(new MCompoundUniqueConstraint(columns));
+  }
 }

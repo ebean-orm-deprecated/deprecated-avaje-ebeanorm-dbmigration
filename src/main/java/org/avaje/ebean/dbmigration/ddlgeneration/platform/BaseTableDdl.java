@@ -47,6 +47,7 @@ public class BaseTableDdl implements TableDdl {
 
     writeCheckConstraints(apply, createTable);
     writeUniqueConstraints(apply, createTable);
+    writeCompoundUniqueConstraints(apply, createTable);
     if (!pk.isEmpty()) {
       writePrimaryKeyConstraint(apply, tableName, pk);
     }
@@ -56,6 +57,10 @@ public class BaseTableDdl implements TableDdl {
 
     // add drop table to the rollback buffer
     dropTable(writer.rollback(), tableName);
+
+  }
+
+  private void writeCompoundUniqueConstraints(DdlBuffer apply, CreateTable createTable) {
 
   }
 

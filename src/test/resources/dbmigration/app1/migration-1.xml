@@ -35,7 +35,9 @@
     <createTable name="hello_world" withHistory="true">
       <column name="id" type="integer" primaryKey="true"/>
       <column name="name" type="varchar(20)" notnull="true"/>
+      <column name="type" type="varchar(20)" notnull="true"/>
       <column name="description" type="varchar(20)" notnull="true"/>
+      <uniqueConstraint columnNames="name,type"/>
     </createTable>
 
     <addColumn tableName="hello_world">

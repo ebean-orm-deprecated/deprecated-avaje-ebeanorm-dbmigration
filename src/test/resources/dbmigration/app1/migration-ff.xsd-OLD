@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://ebean-orm.github.io/xml/ns/dbmigration" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="uniqueConstraint">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:columnName" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dropColumn">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="columnName"/>
+          <xs:attribute type="xs:string" name="tableName"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="columnName">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="value"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sql">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:apply" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:rollback" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="changeSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:sql" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:createTable" maxOccurs="unbounded" minOccurs="0" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:addColumn" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:dropColumn" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:createHistoryTable" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="column">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="name" use="optional"/>
+          <xs:attribute type="xs:string" name="type" use="optional"/>
+          <xs:attribute type="xs:string" name="notnull" use="optional"/>
+          <xs:attribute type="xs:string" name="primaryKey" use="optional"/>
+          <xs:attribute type="xs:string" name="references" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="migration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:changeSet" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="apply" type="xs:string"/>
+  <xs:element name="addColumn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:column" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="tableName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rollback" type="xs:string"/>
+  <xs:element name="createTable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dbm:column" maxOccurs="unbounded" minOccurs="0" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+        <xs:element ref="dbm:uniqueConstraint" minOccurs="0" xmlns:dbm="http://ebean-orm.github.io/xml/ns/dbmigration"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="name" use="optional"/>
+      <xs:attribute type="xs:string" name="withHistory" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="createHistoryTable">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="baseTable"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="resourcePath" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="columnNames" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="constraintName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -28,60 +28,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "application")
-public class Application {
+@XmlRootElement(name = "uniqueConstraint")
+public class UniqueConstraint {
 
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "resourcePath", required = true)
-    protected String resourcePath;
+    @XmlAttribute(name = "columnNames", required = true)
+    protected String columnNames;
+    @XmlAttribute(name = "constraintName")
+    protected String constraintName;
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the columnNames property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getColumnNames() {
+        return columnNames;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the columnNames property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setColumnNames(String value) {
+        this.columnNames = value;
     }
 
     /**
-     * Gets the value of the resourcePath property.
+     * Gets the value of the constraintName property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getResourcePath() {
-        return resourcePath;
+    public String getConstraintName() {
+        return constraintName;
     }
 
     /**
-     * Sets the value of the resourcePath property.
+     * Sets the value of the constraintName property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setResourcePath(String value) {
-        this.resourcePath = value;
+    public void setConstraintName(String value) {
+        this.constraintName = value;
     }
 
 }
