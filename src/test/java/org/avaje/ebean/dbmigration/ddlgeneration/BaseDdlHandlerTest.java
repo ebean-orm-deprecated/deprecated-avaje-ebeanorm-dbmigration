@@ -4,6 +4,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.config.dbplatform.DbTypeMap;
 import com.avaje.ebean.config.dbplatform.PostgresPlatform;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import org.avaje.ebean.dbmigration.ddlgeneration.platform.DdlNamingConvention;
 import org.avaje.ebean.dbmigration.migration.ChangeSet;
 import org.avaje.ebean.dbmigration.model.ModelContainer;
 import org.avaje.ebean.dbmigration.model.ModelDiff;
@@ -24,7 +25,7 @@ public class BaseDdlHandlerTest {
   public void addColumn_nullable_noConstraint() throws Exception {
 
     DdlWrite write = new DdlWrite();
-    BaseDdlHandler handler = new BaseDdlHandler();
+    BaseDdlHandler handler = new BaseDdlHandler(new DdlNamingConvention());
 
     handler.generate(write, Helper.getAddColumn());
 
@@ -36,7 +37,7 @@ public class BaseDdlHandlerTest {
   public void dropColumn() throws Exception {
 
     DdlWrite write = new DdlWrite();
-    BaseDdlHandler handler = new BaseDdlHandler();
+    BaseDdlHandler handler = new BaseDdlHandler(new DdlNamingConvention());
 
     handler.generate(write, Helper.getDropColumn());
 
@@ -49,7 +50,7 @@ public class BaseDdlHandlerTest {
   public void createTable() throws Exception {
 
     DdlWrite write = new DdlWrite();
-    BaseDdlHandler handler = new BaseDdlHandler();
+    BaseDdlHandler handler = new BaseDdlHandler(new DdlNamingConvention());
 
     handler.generate(write, Helper.getCreateTable());
 
@@ -63,7 +64,7 @@ public class BaseDdlHandlerTest {
   public void generateChangeSet() throws Exception {
 
     DdlWrite write = new DdlWrite();
-    BaseDdlHandler handler = new BaseDdlHandler();
+    BaseDdlHandler handler = new BaseDdlHandler(new DdlNamingConvention());
 
     handler.generate(write, Helper.getChangeSet());
 
@@ -101,7 +102,7 @@ public class BaseDdlHandlerTest {
 
     DdlWrite write = new DdlWrite();
 
-    BaseDdlHandler handler = new BaseDdlHandler();
+    BaseDdlHandler handler = new BaseDdlHandler(new DdlNamingConvention());
     handler.generate(write, createChangeSet);
 
     String applyDdl = Helper.asText(this, "/assert/changeset-apply.txt");

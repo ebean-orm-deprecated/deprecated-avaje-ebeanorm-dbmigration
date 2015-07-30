@@ -18,7 +18,8 @@ public class BaseTableDdlTest {
   public void testGenerate() throws Exception {
 
 
-    BaseTableDdl ddlGen = new BaseTableDdl();
+    DdlNamingConvention namingConvention = new DdlNamingConvention();
+    BaseTableDdl ddlGen = new BaseTableDdl(namingConvention);
 
     DdlWrite write = new DdlWrite();
 

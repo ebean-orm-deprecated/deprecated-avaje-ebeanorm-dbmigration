@@ -5,27 +5,29 @@ import org.avaje.ebean.dbmigration.ddlgeneration.DdlWrite;
 import org.avaje.ebean.dbmigration.ddlgeneration.TableDdl;
 import org.avaje.ebean.dbmigration.migration.Column;
 import org.avaje.ebean.dbmigration.migration.CreateTable;
-import org.avaje.ebean.dbmigration.model.MConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Base implementation for 'create table' and 'alter table' statements.
  */
 public class BaseTableDdl implements TableDdl {
 
-  protected boolean inlinePrimaryKeyConstraint = true;
+  protected final DdlNamingConvention namingConvention;
 
-  protected boolean inlineUniqueConstraint = true;
-
-  protected boolean inlineCheckConstraints = true;
-
-  public BaseTableDdl() {
-
+  /**
+   * Construct with a naming convention.
+   */
+  public BaseTableDdl(DdlNamingConvention namingConvention) {
+    this.namingConvention = namingConvention;
   }
 
+  /**
+   * Generate the appropriate 'create table' and matching 'drop table' statements
+   * and add them to the 'apply' and 'rollback' buffers.
+   */
   @Override
   public void generate(DdlWrite writer, CreateTable createTable) throws IOException {
 
@@ -38,50 +40,53 @@ public class BaseTableDdl implements TableDdl {
     for (int i = 0; i < columns.size(); i++) {
       apply.newLine();
       writeColumnDefinition(apply, columns.get(i));
-      if (i < columns.size()-1) {
+      if (i < columns.size() - 1) {
         apply.append(",");
       }
     }
 
-    if (inlineCheckConstraints) {
-      inlineCheckConstraints(apply,  createTable);
-    }
-
-    if (inlineUniqueConstraint) {
-      inlineUniqueConstraints(apply, createTable);
-    }
-    if (inlinePrimaryKeyConstraint && !pk.isEmpty()) {
-      inlinePrimaryKeyConstraint(apply, tableName, pk);
+    writeCheckConstraints(apply, createTable);
+    writeUniqueConstraints(apply, createTable);
+    if (!pk.isEmpty()) {
+      writePrimaryKeyConstraint(apply, tableName, pk);
     }
 
     apply.newLine().append(")").endOfStatement();
-
-    if (!inlinePrimaryKeyConstraint && !pk.isEmpty()) {
-      alterTableAddPrimaryKey(apply, tableName, pk);
-    }
-    if (!inlineUniqueConstraint) {
-      // TODO: Add unique constraints
-    }
     apply.end();
 
+    // add drop table to the rollback buffer
+    dropTable(writer.rollback(), tableName);
 
-    writer.rollback().append("drop table ").append(tableName).endOfStatement().end();
   }
 
-  protected void inlineCheckConstraints(DdlBuffer apply, CreateTable createTable) throws IOException {
+  /**
+   * Add 'drop table' statement to the buffer.
+   */
+  protected void dropTable(DdlBuffer buffer, String tableName) throws IOException {
+
+    buffer.append("drop table ").append(tableName).endOfStatement().end();
+  }
+
+  /**
+   * Write all the check constraints.
+   */
+  protected void writeCheckConstraints(DdlBuffer apply, CreateTable createTable) throws IOException {
 
     List<Column> columns = createTable.getColumn();
     for (Column column : columns) {
       String checkConstraint = column.getCheckConstraint();
       if (!isEmpty(checkConstraint)) {
-        inlineCheckConstraint(apply, createTable.getName(), column, checkConstraint);
+        writeCheckConstraint(apply, createTable.getName(), column, checkConstraint);
       }
     }
   }
 
-  private void inlineCheckConstraint(DdlBuffer buffer, String tableName, Column column, String checkConstraint) throws IOException {
+  /**
+   * Write a check constraint.
+   */
+  protected void writeCheckConstraint(DdlBuffer buffer, String tableName, Column column, String checkConstraint) throws IOException {
 
-    String ckName = determineCheckConstraintName(tableName, column);
+    String ckName = determineCheckConstraintName(tableName, column.getName());
 
     buffer.append(",").newLine();
     buffer.append("  constraint ").append(ckName);
@@ -91,7 +96,7 @@ public class BaseTableDdl implements TableDdl {
   /**
    * Write the unique constraints inline with the create table statement.
    */
-  protected void inlineUniqueConstraints(DdlBuffer apply, CreateTable createTable) throws IOException {
+  protected void writeUniqueConstraints(DdlBuffer apply, CreateTable createTable) throws IOException {
 
     List<Column> columns = createTable.getColumn();
     for (Column column : columns) {
@@ -109,7 +114,7 @@ public class BaseTableDdl implements TableDdl {
    */
   protected void inlineUniqueConstraintSingle(DdlBuffer buffer, String tableName, Column column) throws IOException {
 
-    String uqName = determineUniqueConstraintName(tableName, column);
+    String uqName = determineUniqueConstraintName(tableName, column.getName());
 
     buffer.append(",").newLine();
     buffer.append("  constraint ").append(uqName).append(" unique ");
@@ -121,7 +126,7 @@ public class BaseTableDdl implements TableDdl {
   /**
    * Write the primary key constraint inline with the create table statement.
    */
-  protected void inlinePrimaryKeyConstraint(DdlBuffer buffer, String tableName, List<Column> pk) throws IOException {
+  protected void writePrimaryKeyConstraint(DdlBuffer buffer, String tableName, List<Column> pk) throws IOException {
 
     String pkName = determinePrimaryKeyName(tableName, pk);
 
@@ -137,7 +142,10 @@ public class BaseTableDdl implements TableDdl {
     buffer.append(")");
   }
 
-  protected void alterTableAddPrimaryKey(DdlBuffer buffer, String tableName, List<Column> pk) throws IOException {
+  /**
+   * Write alter table add primary key statement.
+   */
+  public void alterTableAddPrimaryKey(DdlBuffer buffer, String tableName, List<Column> pk) throws IOException {
 
     String pkName = determinePrimaryKeyName(tableName, pk);
 
@@ -152,6 +160,9 @@ public class BaseTableDdl implements TableDdl {
     buffer.append(")").endOfStatement();
   }
 
+  /**
+   * Write the column definition to the create table statement.
+   */
   protected void writeColumnDefinition(DdlBuffer buffer, Column column) throws IOException {
 
     buffer.append("  ");
@@ -165,35 +176,58 @@ public class BaseTableDdl implements TableDdl {
     // so that the database can potentially provide a nice SQL error
   }
 
-
+  /**
+   * Return the primary key constraint name.
+   */
   protected String determinePrimaryKeyName(String tableName, List<Column> pkColumns) {
-    return "pk_" + tableName;
+
+    // collect the primary key column names
+    List<String> pkColumnNames = new ArrayList<>(pkColumns.size());
+    for (int i = 0; i < pkColumns.size(); i++) {
+      pkColumnNames.add(pkColumns.get(i).getName());
+    }
+    return namingConvention.primaryKeyName(tableName, pkColumnNames);
   }
 
-  protected String determineUniqueConstraintName(String tableName, Column column) {
-    return "uq_" + tableName + "_" + column.getName();
+  /**
+   * Return the unique constraint name.
+   */
+  protected String determineUniqueConstraintName(String tableName, String columnName) {
+
+    return namingConvention.uniqueConstraintName(tableName, columnName);
   }
 
-  protected String determineCheckConstraintName(String tableName, Column column) {
-    return "ck_" + tableName + "_" + column.getName();
+  /**
+   * Return the constraint name.
+   */
+  protected String determineCheckConstraintName(String tableName, String columnName) {
+
+    return namingConvention.checkConstraintName(tableName, columnName);
   }
 
-
+  /**
+   * Return the list of columns that make the primary key.
+   */
   protected List<Column> determinePrimaryKeyColumns(List<Column> columns) {
     List<Column> pk = new ArrayList<>(3);
     for (Column column : columns) {
-      if (Boolean.TRUE.equals(column.isPrimaryKey())) {
+      if (isTrue(column.isPrimaryKey())) {
         pk.add(column);
       }
     }
     return pk;
   }
 
-
+  /**
+   * Return true if null or trimmed string is empty.
+   */
   protected boolean isEmpty(String value) {
     return value == null || value.trim().isEmpty();
   }
 
+  /**
+   * Null safe Boolean true test.
+   */
   protected boolean isTrue(Boolean value) {
     return Boolean.TRUE.equals(value);
   }

@@ -2,6 +2,7 @@ package org.avaje.ebean.dbmigration.ddlgeneration;
 
 import org.avaje.ebean.dbmigration.ddlgeneration.platform.BaseColumnDdl;
 import org.avaje.ebean.dbmigration.ddlgeneration.platform.BaseTableDdl;
+import org.avaje.ebean.dbmigration.ddlgeneration.platform.DdlNamingConvention;
 import org.avaje.ebean.dbmigration.migration.AddColumn;
 import org.avaje.ebean.dbmigration.migration.ChangeSet;
 import org.avaje.ebean.dbmigration.migration.CreateTable;
@@ -19,9 +20,9 @@ public class BaseDdlHandler implements DdlHandler {
 
   protected TableDdl tableDdl;
 
-  public BaseDdlHandler() {
+  public BaseDdlHandler(DdlNamingConvention namingConvention) {
+    this.tableDdl = new BaseTableDdl(namingConvention);
     this.columnDdl = new BaseColumnDdl();
-    this.tableDdl = new BaseTableDdl();
   }
 
   @Override
