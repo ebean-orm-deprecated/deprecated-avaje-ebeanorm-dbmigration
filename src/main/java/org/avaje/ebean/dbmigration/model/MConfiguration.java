@@ -9,11 +9,11 @@ import org.avaje.ebean.dbmigration.migration.DefaultTablespace;
  */
 public class MConfiguration {
 
-  private String tableTablespace;
+  protected String tableTablespace;
 
-  private String indexTablespace;
+  protected String indexTablespace;
 
-  private String historyTablespace;
+  protected String historyTablespace;
 
   /**
    * Apply the migration configuration.
@@ -62,7 +62,7 @@ public class MConfiguration {
     return historyTablespace;
   }
 
-  private boolean isNotEmpty(String tables) {
+  protected boolean isNotEmpty(String tables) {
     return tables != null && !tables.trim().isEmpty();
   }
 }

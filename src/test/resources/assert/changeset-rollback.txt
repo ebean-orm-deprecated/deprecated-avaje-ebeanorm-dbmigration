@@ -1,4 +1,22 @@
-drop table foo;
+drop table o_address;
 
-alter table foo drop column added_to_foo;
+drop table car_accessory;
+
+drop table be_contact;
+
+drop table contact_note;
+
+drop table o_country;
+
+drop table be_customer;
+
+drop table o_order;
+
+drop table o_order_detail;
+
+drop table o_product;
+
+drop table truck_ref;
+
+drop table vehicle;
 

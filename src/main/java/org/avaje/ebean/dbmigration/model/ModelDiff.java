@@ -1,7 +1,5 @@
 package org.avaje.ebean.dbmigration.model;
 
-import org.avaje.ebean.dbmigration.migration.CreateTable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,23 +11,44 @@ import java.util.Map;
  */
 public class ModelDiff {
 
-  final ModelContainer baseModel;
+  private final ModelContainer baseModel;
 
   /**
    * List of 'create' type changes.
    */
-  List<Object> createChanges = new ArrayList<>();
+  private final List<Object> createChanges = new ArrayList<>();
 
   /**
    * List of 'drop' type changes. Potential for putting into a separate changeSet.
    */
-  List<Object> dropChanges = new ArrayList<>();
+  private final List<Object> dropChanges = new ArrayList<>();
 
   /**
    * Construct with a base model.
    */
   public ModelDiff(ModelContainer baseModel) {
     this.baseModel = baseModel;
+  }
+
+  /**
+   * Construct with a base model.
+   */
+  public ModelDiff() {
+    this.baseModel = new ModelContainer();
+  }
+
+  /**
+   * Return the list of 'create' changes.
+   */
+  public List<Object> getCreateChanges() {
+    return createChanges;
+  }
+
+  /**
+   * Return the list of 'drop' changes.
+   */
+  public List<Object> getDropChanges() {
+    return dropChanges;
   }
 
   /**

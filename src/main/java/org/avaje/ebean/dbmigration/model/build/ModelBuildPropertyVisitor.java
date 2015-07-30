@@ -8,7 +8,7 @@ import com.avaje.ebeaninternal.server.deploy.TableJoinColumn;
 import com.avaje.ebeaninternal.server.deploy.id.ImportedId;
 import org.avaje.ebean.dbmigration.model.MColumn;
 import org.avaje.ebean.dbmigration.model.MTable;
-import org.avaje.ebean.dbmigration.visitor.BaseTablePropertyVisitor;
+import org.avaje.ebean.dbmigration.model.visitor.BaseTablePropertyVisitor;
 
 /**
  * Used as part of CreateTableVisitor to generated the create table DDL script.
@@ -122,6 +122,7 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
     if (p.isUnique() && !p.isId()) {
       col.setUnique(true);
     }
+    col.setCheckConstraint(p.getDbConstraintExpression());
 
     table.addColumn(col);
 	}

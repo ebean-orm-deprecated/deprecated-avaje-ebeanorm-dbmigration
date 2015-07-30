@@ -26,7 +26,7 @@ public class Customer extends BaseModel {
   
   boolean inactive;
   
-  @Column(length=100)
+  @Column(length=100, unique = true)
   String name;
 
   Date registered;
