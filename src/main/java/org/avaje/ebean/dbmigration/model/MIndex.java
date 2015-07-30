@@ -1,7 +1,7 @@
 package org.avaje.ebean.dbmigration.model;
 
 /**
- * Created by rob on 28/07/15.
+ * Index as part of the logical model.
  */
 public class MIndex {
 }

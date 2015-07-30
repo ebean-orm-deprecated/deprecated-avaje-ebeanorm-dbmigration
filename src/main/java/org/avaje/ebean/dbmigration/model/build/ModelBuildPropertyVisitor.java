@@ -11,15 +11,12 @@ import org.avaje.ebean.dbmigration.model.MTable;
 import org.avaje.ebean.dbmigration.model.visitor.BaseTablePropertyVisitor;
 
 /**
- * Used as part of CreateTableVisitor to generated the create table DDL script.
+ * Used as part of ModelBuildBeanVisitor and generally adds the MColumn to the associated
+ * MTable model objects.
  */
 public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
 
-  //private static final Logger logger = LoggerFactory.getLogger(AddColumnVisitor.class);
-
   private final ModelBuildContext ctx;
-
-  //private BeanPropertyAssocOne<?> embedded;
 
   private MTable table;
 
@@ -91,6 +88,10 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
       String columnDefn = ctx.getColumnDefn(importedProperty);
 
       MColumn col = new MColumn(dbCol, columnDefn, !p.isNullable());
+
+      // Adding the unique constraint restricts the cardinality from OneToMany down to OneToOne
+      col.setUnique(true);
+
       table.addColumn(col);
     }
 //    constraintExpr.append(")");
@@ -100,7 +101,6 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
 //        parent.addUniqueConstraint(constraintExpr.toString());
 //      }
 //    }
-
   }
 
 	@Override
@@ -109,7 +109,6 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
     if (p.isSecondaryTable()) {
       return;
     }
-
 
     MColumn col = new MColumn(p.getDbColumn(), ctx.getColumnDefn(p));
 

@@ -72,15 +72,6 @@ public class BeanPropertyVisitor {
       }
 
       visitInheritanceProperties(desc, propertyVisitor);
-
-//      InheritInfo inheritInfo = desc.getInheritInfo();
-//      if (inheritInfo != null && inheritInfo.isRoot()) {
-//        // add all properties on the children objects
-//        BeanProperty[] propertiesLocal = inheritInfo.getBeanDescriptor().propertiesLocal();
-//        for (int i = 0; i <propertiesLocal.length ; i++) {
-//          visit(propertyVisitor, propertiesLocal[i]);
-//        }
-//      }
     }
   }
 

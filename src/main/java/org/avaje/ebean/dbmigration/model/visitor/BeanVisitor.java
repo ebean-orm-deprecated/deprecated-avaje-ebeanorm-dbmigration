@@ -14,14 +14,4 @@ public interface BeanVisitor {
    * property on the entity bean (return null to skip visiting this bean).
 	 */
   PropertyVisitor visitBean(BeanDescriptor<?> descriptor);
-
-//	/**
-//	 * Visit a property potentially return a specific PropertyVisitor.
-//	 * <p>
-//	 * A PropertyVisitor can be returned to more easily process bean properties
-//	 * by their specific type.
-//	 * </p>
-//	 */
-//	PropertyVisitor visitProperty(BeanProperty p);
-
 }

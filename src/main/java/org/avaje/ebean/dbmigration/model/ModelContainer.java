@@ -19,22 +19,30 @@ import java.util.Map;
  */
 public class ModelContainer {
 
+  /**
+   * All the tables in the model.
+   */
   private Map<String, MTable> tables = new LinkedHashMap<>();
 
 
-  public void diff() {
-
-  }
-
+  /**
+   * Return the map of all the tables.
+   */
   public Map<String, MTable> getTables() {
     return tables;
   }
 
+  /**
+   * Return the table by name.
+   */
   public MTable getTable(String tableName) {
     return tables.get(tableName);
   }
 
 
+  /**
+   * Apply a migration with associated changeSets to the model.
+   */
   public void apply(Migration migration) {
 
     List<ChangeSet> changeSets = migration.getChangeSet();
@@ -43,7 +51,10 @@ public class ModelContainer {
     }
   }
 
-  private void applyChangeSet(ChangeSet changeSet) {
+  /**
+   * Apply a changeSet to the model.
+   */
+  protected void applyChangeSet(ChangeSet changeSet) {
 
     List<Object> changeSetChildren = changeSet.getChangeSetChildren();
     for (Object change : changeSetChildren) {
@@ -57,7 +68,10 @@ public class ModelContainer {
     }
   }
 
-  private void applyChange(CreateTable createTable) {
+  /**
+   * Apply a CreateTable change to the model.
+   */
+  protected void applyChange(CreateTable createTable) {
     String tableName = createTable.getName();
     if (tables.containsKey(tableName)) {
       throw new IllegalStateException("Table [" + tableName + "] already exists?");
@@ -66,7 +80,10 @@ public class ModelContainer {
     tables.put(tableName, table);
   }
 
-  private void applyChange(AddColumn addColumn) {
+  /**
+   * Apply a AddColumn change to the model.
+   */
+  protected void applyChange(AddColumn addColumn) {
     MTable table = tables.get(addColumn.getTableName());
     if (table == null) {
       throw new IllegalStateException("Table [" + addColumn.getTableName() + "] does not exist?");
@@ -74,7 +91,10 @@ public class ModelContainer {
     table.apply(addColumn);
   }
 
-  private void applyChange(DropColumn dropColumn) {
+  /**
+   * Apply a DropColumn change to the model.
+   */
+  protected void applyChange(DropColumn dropColumn) {
     MTable table = tables.get(dropColumn.getTableName());
     if (table == null) {
       throw new IllegalStateException("Table [" + dropColumn.getTableName() + "] does not exist?");

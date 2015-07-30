@@ -2,12 +2,10 @@ package org.avaje.ebean.dbmigration.model.build;
 
 import com.avaje.ebean.config.dbplatform.DbType;
 import com.avaje.ebeaninternal.server.deploy.BeanDescriptor;
-import com.avaje.ebeaninternal.server.deploy.BeanProperty;
 import com.avaje.ebeaninternal.server.deploy.CompoundUniqueContraint;
 import com.avaje.ebeaninternal.server.deploy.InheritInfo;
 import org.avaje.ebean.dbmigration.model.MColumn;
 import org.avaje.ebean.dbmigration.model.MTable;
-import org.avaje.ebean.dbmigration.model.visitor.BeanInheritanceVisitor;
 import org.avaje.ebean.dbmigration.model.visitor.BeanVisitor;
 import org.avaje.ebean.dbmigration.model.visitor.PropertyVisitor;
 
@@ -52,6 +50,7 @@ public class ModelBuildBeanVisitor implements BeanVisitor {
 
     CompoundUniqueContraint[] compoundUniqueConstraints = descriptor.getCompoundUniqueConstraints();
     if (compoundUniqueConstraints != null) {
+      //TODO CompoundUniqueContraint
 //      String table = descriptor.getBaseTable();
 //      for (int i = 0; i < compoundUniqueConstraints.length; i++) {
 //        String constraint = createUniqueConstraint(table, i, compoundUniqueConstraints[i]);

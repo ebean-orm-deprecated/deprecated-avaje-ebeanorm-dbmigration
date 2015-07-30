@@ -11,10 +11,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Holds the logical model for a given Table.
+ * Holds the logical model for a given Table and everything associated to it.
+ * <p>
+ *   This effectively represents a table, its columns and all associated
+ *   constraints, foreign keys and indexes.
+ * </p>
  * <p>
  *   Migrations can be applied to this such that it represents the state
  *   of a given table after various migrations have been applied.
+ * </p>
+ * <p>
+ *   This table model can also be derived from the EbeanServer bean descriptor
+ *   and associated properties.
  * </p>
  */
 public class MTable {
@@ -51,7 +59,6 @@ public class MTable {
     }
   }
 
-
   /**
    * Construct typically from EbeanServer meta data.
    */
@@ -87,8 +94,7 @@ public class MTable {
    */
   public void apply(AddColumn addColumn) {
     checkTableName(addColumn.getTableName());
-    List<Column> cols = addColumn.getColumn();
-    for (Column column : cols) {
+    for (Column column : addColumn.getColumn()) {
       addColumn(column);
     }
   }
@@ -98,8 +104,7 @@ public class MTable {
    */
   public void apply(DropColumn dropColumn) {
     checkTableName(dropColumn.getTableName());
-    String columnName = dropColumn.getColumnName();
-    columns.remove(columnName);
+    columns.remove(dropColumn.getColumnName());
   }
 
   public String getName() {

@@ -11,17 +11,20 @@ import java.util.Map;
  */
 public class ModelDiff {
 
-  private final ModelContainer baseModel;
+  /**
+   * The base model to which we compare the newer model.
+   */
+  protected final ModelContainer baseModel;
 
   /**
    * List of 'create' type changes.
    */
-  private final List<Object> createChanges = new ArrayList<>();
+  protected final List<Object> createChanges = new ArrayList<>();
 
   /**
    * List of 'drop' type changes. Potential for putting into a separate changeSet.
    */
-  private final List<Object> dropChanges = new ArrayList<>();
+  protected final List<Object> dropChanges = new ArrayList<>();
 
   /**
    * Construct with a base model.
@@ -56,9 +59,7 @@ public class ModelDiff {
    */
   public void compareTo(ModelContainer newModel) {
 
-    Map<String, MTable> tables = newModel.getTables();
-    Collection<MTable> values = tables.values();
-    for (MTable newTable : values) {
+    for (MTable newTable : newModel.getTables().values()) {
 
       MTable currentTable = baseModel.getTable(newTable.getName());
       if (currentTable == null) {
@@ -70,16 +71,22 @@ public class ModelDiff {
 
     //TODO: other parts of the model? views, indexes etc
 
-
   }
 
-  private void addNewTable(MTable newTable) {
+  /**
+   * Add CreateTable to the 'creation' changes.
+   */
+  protected void addNewTable(MTable newTable) {
 
     createChanges.add(newTable.createTable());
   }
 
-  private void compareTables(MTable currentTable, MTable newTable) {
+  /**
+   * Compare tables looking for add/drop/modify columns etc.
+   */
+  protected void compareTables(MTable currentTable, MTable newTable) {
 
+    //TODO: compareTables()
     // changed columns
     // find additional columns
     // find removed columns

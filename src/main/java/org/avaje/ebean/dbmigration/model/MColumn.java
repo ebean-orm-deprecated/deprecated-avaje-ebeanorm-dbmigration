@@ -1,10 +1,9 @@
 package org.avaje.ebean.dbmigration.model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.avaje.ebean.dbmigration.migration.Column;
 
 /**
- * Created by rob on 28/07/15.
+ * A column in the logical model.
  */
 public class MColumn {
 

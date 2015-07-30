@@ -9,10 +9,19 @@ import org.avaje.ebean.dbmigration.migration.DefaultTablespace;
  */
 public class MConfiguration {
 
+  /**
+   * Default tablespace for tables.
+   */
   protected String tableTablespace;
 
+  /**
+   * Default tablespace for indexes.
+   */
   protected String indexTablespace;
 
+  /**
+   * Default tablespace for history tables.
+   */
   protected String historyTablespace;
 
   /**
