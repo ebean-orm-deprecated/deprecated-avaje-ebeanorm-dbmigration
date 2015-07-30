@@ -65,6 +65,31 @@ create table be_customer (
   constraint pk_be_customer primary key (id)
 );
 
+create table mrole (
+  id                            integer not null,
+  role_name                     varchar(255),
+  constraint pk_mrole primary key (id)
+);
+
+create table mrole_muser (
+  mrole_id                      integer not null,
+  muser_id                      integer not null,
+  constraint pk_mrole_muser primary key (mrole_id,muser_id)
+);
+
+create table muser (
+  id                            integer not null,
+  user_name                     varchar(255),
+  user_type_id                  integer,
+  constraint pk_muser primary key (id)
+);
+
+create table muser_type (
+  id                            integer not null,
+  name                          varchar(255),
+  constraint pk_muser_type primary key (id)
+);
+
 create table o_order (
   id                            bigint not null,
   status                        varchar(1),

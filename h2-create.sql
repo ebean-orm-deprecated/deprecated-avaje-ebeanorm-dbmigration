@@ -65,6 +65,25 @@ create table be_customer (
   constraint pk_be_customer primary key (id))
 ;
 
+create table mrole (
+  id                        integer not null,
+  role_name                 varchar(255),
+  constraint pk_mrole primary key (id))
+;
+
+create table muser (
+  id                        integer not null,
+  user_name                 varchar(255),
+  user_type_id              integer,
+  constraint pk_muser primary key (id))
+;
+
+create table muser_type (
+  id                        integer not null,
+  name                      varchar(255),
+  constraint pk_muser_type primary key (id))
+;
+
 create table o_order (
   id                        bigint not null,
   status                    varchar(1),
@@ -123,6 +142,12 @@ create table vehicle (
   constraint pk_vehicle primary key (id))
 ;
 
+
+create table mrole_muser (
+  mrole_id                       integer not null,
+  muser_id                       integer not null,
+  constraint pk_mrole_muser primary key (mrole_id, muser_id))
+;
 create sequence o_address_seq;
 
 create sequence car_accessory_seq;
@@ -134,6 +159,12 @@ create sequence contact_note_seq;
 create sequence o_country_seq;
 
 create sequence be_customer_seq;
+
+create sequence mrole_seq;
+
+create sequence muser_seq;
+
+create sequence muser_type_seq;
 
 create sequence o_order_seq;
 
@@ -157,17 +188,23 @@ alter table be_customer add constraint fk_be_customer_billingAddress_5 foreign k
 create index ix_be_customer_billingAddress_5 on be_customer (billing_address_id);
 alter table be_customer add constraint fk_be_customer_shippingAddress_6 foreign key (shipping_address_id) references o_address (id) on delete restrict on update restrict;
 create index ix_be_customer_shippingAddress_6 on be_customer (shipping_address_id);
-alter table o_order add constraint fk_o_order_customer_7 foreign key (customer_id) references be_customer (id) on delete restrict on update restrict;
-create index ix_o_order_customer_7 on o_order (customer_id);
-alter table o_order add constraint fk_o_order_shippingAddress_8 foreign key (shipping_address_id) references o_address (id) on delete restrict on update restrict;
-create index ix_o_order_shippingAddress_8 on o_order (shipping_address_id);
-alter table o_order_detail add constraint fk_o_order_detail_order_9 foreign key (order_id) references o_order (id) on delete restrict on update restrict;
-create index ix_o_order_detail_order_9 on o_order_detail (order_id);
-alter table o_order_detail add constraint fk_o_order_detail_product_10 foreign key (product_id) references o_product (id) on delete restrict on update restrict;
-create index ix_o_order_detail_product_10 on o_order_detail (product_id);
-alter table vehicle add constraint fk_vehicle_truckRef_11 foreign key (truck_ref_id) references truck_ref (id) on delete restrict on update restrict;
-create index ix_vehicle_truckRef_11 on vehicle (truck_ref_id);
-alter table vehicle add constraint fk_vehicle_carRef_12 foreign key (car_ref_id) references truck_ref (id) on delete restrict on update restrict;
-create index ix_vehicle_carRef_12 on vehicle (car_ref_id);
+alter table muser add constraint fk_muser_userType_7 foreign key (user_type_id) references muser_type (id) on delete restrict on update restrict;
+create index ix_muser_userType_7 on muser (user_type_id);
+alter table o_order add constraint fk_o_order_customer_8 foreign key (customer_id) references be_customer (id) on delete restrict on update restrict;
+create index ix_o_order_customer_8 on o_order (customer_id);
+alter table o_order add constraint fk_o_order_shippingAddress_9 foreign key (shipping_address_id) references o_address (id) on delete restrict on update restrict;
+create index ix_o_order_shippingAddress_9 on o_order (shipping_address_id);
+alter table o_order_detail add constraint fk_o_order_detail_order_10 foreign key (order_id) references o_order (id) on delete restrict on update restrict;
+create index ix_o_order_detail_order_10 on o_order_detail (order_id);
+alter table o_order_detail add constraint fk_o_order_detail_product_11 foreign key (product_id) references o_product (id) on delete restrict on update restrict;
+create index ix_o_order_detail_product_11 on o_order_detail (product_id);
+alter table vehicle add constraint fk_vehicle_truckRef_12 foreign key (truck_ref_id) references truck_ref (id) on delete restrict on update restrict;
+create index ix_vehicle_truckRef_12 on vehicle (truck_ref_id);
+alter table vehicle add constraint fk_vehicle_carRef_13 foreign key (car_ref_id) references truck_ref (id) on delete restrict on update restrict;
+create index ix_vehicle_carRef_13 on vehicle (car_ref_id);
 
 
+
+alter table mrole_muser add constraint fk_mrole_muser_mrole_01 foreign key (mrole_id) references mrole (id) on delete restrict on update restrict;
+
+alter table mrole_muser add constraint fk_mrole_muser_muser_02 foreign key (muser_id) references muser (id) on delete restrict on update restrict;

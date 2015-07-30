@@ -46,7 +46,7 @@ public class BaseTableDdlTest {
     col2.setName("status");
     col2.setType("varchar(1)");
     col2.setNotnull(true);
-    col2.setCheckConstraint("in ('A','B')");
+    col2.setCheckConstraint("check (status in ('A','B'))");
 
     columns.add(col2);
 

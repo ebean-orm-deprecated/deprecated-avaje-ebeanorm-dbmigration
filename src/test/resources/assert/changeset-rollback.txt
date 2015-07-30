@@ -10,6 +10,14 @@ drop table o_country;
 
 drop table be_customer;
 
+drop table mrole;
+
+drop table mrole_muser;
+
+drop table muser;
+
+drop table muser_type;
+
 drop table o_order;
 
 drop table o_order_detail;

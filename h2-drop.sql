@@ -12,6 +12,14 @@ drop table if exists o_country;
 
 drop table if exists be_customer;
 
+drop table if exists mrole;
+
+drop table if exists mrole_muser;
+
+drop table if exists muser;
+
+drop table if exists muser_type;
+
 drop table if exists o_order;
 
 drop table if exists o_order_detail;
@@ -35,6 +43,12 @@ drop sequence if exists contact_note_seq;
 drop sequence if exists o_country_seq;
 
 drop sequence if exists be_customer_seq;
+
+drop sequence if exists mrole_seq;
+
+drop sequence if exists muser_seq;
+
+drop sequence if exists muser_type_seq;
 
 drop sequence if exists o_order_seq;
 

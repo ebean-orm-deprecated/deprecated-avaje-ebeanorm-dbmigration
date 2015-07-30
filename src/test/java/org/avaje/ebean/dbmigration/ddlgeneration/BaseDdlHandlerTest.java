@@ -67,8 +67,8 @@ public class BaseDdlHandlerTest {
 
     handler.generate(write, Helper.getChangeSet());
 
-    String applyDdl = Helper.asText(this, "/assert/changeset-apply.txt");
-    String rollbackDdl = Helper.asText(this, "/assert/changeset-rollback.txt");
+    String applyDdl = Helper.asText(this, "/assert/BaseDdlHandlerTest/apply.sql");
+    String rollbackDdl = Helper.asText(this, "/assert/BaseDdlHandlerTest/rollback.sql");
 
     assertThat(write.apply().getBuffer()).isEqualTo(applyDdl);
     assertThat(write.rollback().getBuffer()).isEqualTo(rollbackDdl);
