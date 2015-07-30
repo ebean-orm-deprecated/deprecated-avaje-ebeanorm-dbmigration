@@ -5,13 +5,12 @@ import org.avaje.ebean.dbmigration.migration.ChangeSet;
 import org.avaje.ebean.dbmigration.migration.CreateTable;
 import org.avaje.ebean.dbmigration.migration.DropColumn;
 import org.avaje.ebean.dbmigration.migration.Migration;
-import org.avaje.ebean.dbmigration.reader.MigrationXmlReader;
+import org.avaje.ebean.dbmigration.migrationreader.MigrationXmlReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.StringReader;
 import java.util.List;
 
 /**

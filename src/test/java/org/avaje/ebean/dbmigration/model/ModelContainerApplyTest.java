@@ -5,7 +5,7 @@ import org.avaje.ebean.dbmigration.migration.ChangeSet;
 import org.avaje.ebean.dbmigration.migration.CreateTable;
 import org.avaje.ebean.dbmigration.migration.DropColumn;
 import org.avaje.ebean.dbmigration.migration.Migration;
-import org.avaje.ebean.dbmigration.reader.MigrationXmlReader;
+import org.avaje.ebean.dbmigration.migrationreader.MigrationXmlReader;
 import org.junit.Test;
 
 import java.util.List;

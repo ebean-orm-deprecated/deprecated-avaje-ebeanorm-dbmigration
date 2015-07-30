@@ -1,4 +1,4 @@
-package org.avaje.ebean.dbmigration.reader;
+package org.avaje.ebean.dbmigration.migrationreader;
 
 
 import org.avaje.ebean.dbmigration.migration.Migration;

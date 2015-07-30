@@ -132,7 +132,7 @@
     </xsd:complexType>
   </xsd:element>
 
-  <xsd:element name="createDropHistoryTable">
+  <xsd:element name="dropHistoryTable">
     <xsd:complexType>
       <xsd:attribute name="baseTable" type="xsd:string" use="required"/>
     </xsd:complexType>
