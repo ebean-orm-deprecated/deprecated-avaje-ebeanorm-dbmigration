@@ -21,7 +21,7 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
 
   private final ModelBuildContext ctx;
 
-  private MTable table;
+  private final MTable table;
 
   public ModelBuildPropertyVisitor(ModelBuildContext ctx, MTable table) {
     this.ctx = ctx;
