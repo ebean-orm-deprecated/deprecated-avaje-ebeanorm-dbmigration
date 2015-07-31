@@ -159,4 +159,16 @@ public class MTable {
   public void addCompoundUniqueConstraint(String[] columns) {
    compoundUniqueConstraints.add(new MCompoundUniqueConstraint(columns));
   }
+
+  /**
+   * Add a compound unique constraint.
+   */
+  public void addCompoundUniqueConstraint(List<MColumn> columns) {
+    String[] cols = new String[columns.size()];
+    for (int i = 0; i < columns.size(); i++) {
+      cols[i] = columns.get(i).getName();
+    }
+    addCompoundUniqueConstraint(cols);
+  }
+
 }

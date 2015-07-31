@@ -84,6 +84,20 @@ create table muser_type (
   constraint pk_muser_type primary key (id))
 ;
 
+create table o_booking (
+  id                        bigint not null,
+  booking_date              date,
+  invoice_id                bigint,
+  constraint uq_o_booking_invoice_id unique (invoice_id),
+  constraint pk_o_booking primary key (id))
+;
+
+create table o_invoice (
+  id                        bigint not null,
+  invoice_date              date,
+  constraint pk_o_invoice primary key (id))
+;
+
 create table o_order (
   id                        bigint not null,
   status                    varchar(1),
@@ -166,6 +180,10 @@ create sequence muser_seq;
 
 create sequence muser_type_seq;
 
+create sequence o_booking_seq;
+
+create sequence o_invoice_seq;
+
 create sequence o_order_seq;
 
 create sequence o_order_detail_seq;
@@ -190,18 +208,20 @@ alter table be_customer add constraint fk_be_customer_shippingAddress_6 foreign 
 create index ix_be_customer_shippingAddress_6 on be_customer (shipping_address_id);
 alter table muser add constraint fk_muser_userType_7 foreign key (user_type_id) references muser_type (id) on delete restrict on update restrict;
 create index ix_muser_userType_7 on muser (user_type_id);
-alter table o_order add constraint fk_o_order_customer_8 foreign key (customer_id) references be_customer (id) on delete restrict on update restrict;
-create index ix_o_order_customer_8 on o_order (customer_id);
-alter table o_order add constraint fk_o_order_shippingAddress_9 foreign key (shipping_address_id) references o_address (id) on delete restrict on update restrict;
-create index ix_o_order_shippingAddress_9 on o_order (shipping_address_id);
-alter table o_order_detail add constraint fk_o_order_detail_order_10 foreign key (order_id) references o_order (id) on delete restrict on update restrict;
-create index ix_o_order_detail_order_10 on o_order_detail (order_id);
-alter table o_order_detail add constraint fk_o_order_detail_product_11 foreign key (product_id) references o_product (id) on delete restrict on update restrict;
-create index ix_o_order_detail_product_11 on o_order_detail (product_id);
-alter table vehicle add constraint fk_vehicle_truckRef_12 foreign key (truck_ref_id) references truck_ref (id) on delete restrict on update restrict;
-create index ix_vehicle_truckRef_12 on vehicle (truck_ref_id);
-alter table vehicle add constraint fk_vehicle_carRef_13 foreign key (car_ref_id) references truck_ref (id) on delete restrict on update restrict;
-create index ix_vehicle_carRef_13 on vehicle (car_ref_id);
+alter table o_booking add constraint fk_o_booking_invoice_8 foreign key (invoice_id) references o_invoice (id) on delete restrict on update restrict;
+create index ix_o_booking_invoice_8 on o_booking (invoice_id);
+alter table o_order add constraint fk_o_order_customer_9 foreign key (customer_id) references be_customer (id) on delete restrict on update restrict;
+create index ix_o_order_customer_9 on o_order (customer_id);
+alter table o_order add constraint fk_o_order_shippingAddress_10 foreign key (shipping_address_id) references o_address (id) on delete restrict on update restrict;
+create index ix_o_order_shippingAddress_10 on o_order (shipping_address_id);
+alter table o_order_detail add constraint fk_o_order_detail_order_11 foreign key (order_id) references o_order (id) on delete restrict on update restrict;
+create index ix_o_order_detail_order_11 on o_order_detail (order_id);
+alter table o_order_detail add constraint fk_o_order_detail_product_12 foreign key (product_id) references o_product (id) on delete restrict on update restrict;
+create index ix_o_order_detail_product_12 on o_order_detail (product_id);
+alter table vehicle add constraint fk_vehicle_truckRef_13 foreign key (truck_ref_id) references truck_ref (id) on delete restrict on update restrict;
+create index ix_vehicle_truckRef_13 on vehicle (truck_ref_id);
+alter table vehicle add constraint fk_vehicle_carRef_14 foreign key (car_ref_id) references truck_ref (id) on delete restrict on update restrict;
+create index ix_vehicle_carRef_14 on vehicle (car_ref_id);
 
 
 

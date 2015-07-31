@@ -90,6 +90,20 @@ create table muser_type (
   constraint pk_muser_type primary key (id)
 );
 
+create table o_booking (
+  id                            bigint not null,
+  booking_date                  date,
+  invoice_id                    bigint,
+  constraint uq_o_booking_invoice_id unique (invoice_id),
+  constraint pk_o_booking primary key (id)
+);
+
+create table o_invoice (
+  id                            bigint not null,
+  invoice_date                  date,
+  constraint pk_o_invoice primary key (id)
+);
+
 create table o_order (
   id                            bigint not null,
   status                        varchar(1),

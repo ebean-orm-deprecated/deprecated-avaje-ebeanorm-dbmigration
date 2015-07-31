@@ -18,6 +18,10 @@ drop table muser;
 
 drop table muser_type;
 
+drop table o_booking;
+
+drop table o_invoice;
+
 drop table o_order;
 
 drop table o_order_detail;

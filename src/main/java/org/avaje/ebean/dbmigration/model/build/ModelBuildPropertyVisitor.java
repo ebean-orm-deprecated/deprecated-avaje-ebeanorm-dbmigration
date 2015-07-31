@@ -10,6 +10,9 @@ import org.avaje.ebean.dbmigration.model.MColumn;
 import org.avaje.ebean.dbmigration.model.MTable;
 import org.avaje.ebean.dbmigration.model.visitor.BaseTablePropertyVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Used as part of ModelBuildBeanVisitor and generally adds the MColumn to the associated
  * MTable model objects.
@@ -70,17 +73,11 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
 
     ImportedId importedId = p.getImportedId();
 
-//    StringBuilder constraintExpr = createUniqueConstraintBuffer(p.getBeanDescriptor().getBaseTable(), columns[0].getLocalDbColumn());
+    List<MColumn> modelColumns = new ArrayList<>(columns.length);
 
     for (int i = 0; i < columns.length; i++) {
 
       String dbCol = columns[i].getLocalDbColumn();
-
-//      if (i > 0) {
-//        constraintExpr.append(", ");
-//      }
-//      constraintExpr.append(dbCol);
-
       BeanProperty importedProperty = importedId.findMatchImport(dbCol);
       if (importedProperty == null) {
         throw new RuntimeException("Imported BeanProperty not found?");
@@ -88,19 +85,18 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
       String columnDefn = ctx.getColumnDefn(importedProperty);
 
       MColumn col = new MColumn(dbCol, columnDefn, !p.isNullable());
-
-      // Adding the unique constraint restricts the cardinality from OneToMany down to OneToOne
-      col.setUnique(true);
-
+      modelColumns.add(col);
       table.addColumn(col);
     }
-//    constraintExpr.append(")");
-//
-//    if (p.isOneToOne()) {
-//      if (ddl.isAddOneToOneUniqueContraint()) {
-//        parent.addUniqueConstraint(constraintExpr.toString());
-//      }
-//    }
+
+    if (p.isOneToOne()) {
+      // Adding the unique constraint restricts the cardinality from OneToMany down to OneToOne
+      if (modelColumns.size() == 1) {
+        modelColumns.get(0).setUnique(true);
+      } else {
+        table.addCompoundUniqueConstraint(modelColumns);
+      }
+    }
   }
 
 	@Override
