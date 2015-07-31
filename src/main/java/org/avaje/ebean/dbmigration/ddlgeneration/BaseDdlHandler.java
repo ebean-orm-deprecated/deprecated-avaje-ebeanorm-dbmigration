@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class BaseDdlHandler implements DdlHandler {
 
-  protected ColumnDdl columnDdl;
+  protected final ColumnDdl columnDdl;
 
-  protected TableDdl tableDdl;
+  protected final TableDdl tableDdl;
 
   public BaseDdlHandler(DdlNamingConvention namingConvention) {
     this.tableDdl = new BaseTableDdl(namingConvention);
