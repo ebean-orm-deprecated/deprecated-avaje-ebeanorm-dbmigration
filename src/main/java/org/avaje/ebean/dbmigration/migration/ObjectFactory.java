@@ -70,6 +70,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DropForeignKey }
+     * 
+     */
+    public DropForeignKey createDropForeignKey() {
+        return new DropForeignKey();
+    }
+
+    /**
      * Create an instance of {@link Apply }
      * 
      */
@@ -115,6 +123,14 @@ public class ObjectFactory {
      */
     public RenameView createRenameView() {
         return new RenameView();
+    }
+
+    /**
+     * Create an instance of {@link AddForeignKey }
+     * 
+     */
+    public AddForeignKey createAddForeignKey() {
+        return new AddForeignKey();
     }
 
     /**

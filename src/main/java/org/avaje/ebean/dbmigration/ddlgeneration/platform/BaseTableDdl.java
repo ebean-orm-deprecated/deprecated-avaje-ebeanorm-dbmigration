@@ -1,5 +1,6 @@
 package org.avaje.ebean.dbmigration.ddlgeneration.platform;
 
+import com.avaje.ebean.config.dbplatform.DbTypeMap;
 import org.avaje.ebean.dbmigration.ddlgeneration.DdlBuffer;
 import org.avaje.ebean.dbmigration.ddlgeneration.DdlWrite;
 import org.avaje.ebean.dbmigration.ddlgeneration.TableDdl;
@@ -17,11 +18,11 @@ public class BaseTableDdl implements TableDdl {
 
   protected final DdlNamingConvention namingConvention;
 
-  /**
-   * Construct with a naming convention.
-   */
-  public BaseTableDdl(DdlNamingConvention namingConvention) {
+  protected final PlatformDdl platformDdl;
+
+  public BaseTableDdl(DdlNamingConvention namingConvention, PlatformDdl platformDdl) {
     this.namingConvention = namingConvention;
+    this.platformDdl = platformDdl;
   }
 
   /**
@@ -55,14 +56,70 @@ public class BaseTableDdl implements TableDdl {
     apply.newLine().append(")").endOfStatement();
     apply.end();
 
+    writeAddForeignKeys(writer, createTable);
+
     // add drop table to the rollback buffer
-    dropTable(writer.rollback(), tableName);
+    dropTable(writer.rollbackLast(), tableName);
 
   }
 
-  private void writeCompoundUniqueConstraints(DdlBuffer apply, CreateTable createTable) {
+  protected void writeAddForeignKeys(DdlWrite write, CreateTable createTable) throws IOException {
+
+    List<Column> columns = createTable.getColumn();
+    for (Column column : columns) {
+      String references = column.getReferences();
+      if (hasValue(references)) {
+        writeForeignKey(write, createTable.getName(), column.getName(), references);
+      }
+    }
+  }
+
+  protected void writeForeignKey(DdlWrite write, String tableName, String columnName, String references) throws IOException {
+
+    String fkName = determineForeignKeyConstraintName(tableName, columnName);
+
+    int pos = references.lastIndexOf('.');
+    if (pos == -1) {
+      throw new IllegalStateException("Expecting period '.' character for table.column split but not found in [" + references + "]");
+    }
+    String refTableName = references.substring(0, pos);
+    String refColumnName = references.substring(pos + 1);
+
+    write.applyLast()
+        .append("alter table ").append(tableName)
+        .append(" add constraint ").append(fkName)
+        .append(" foreign key (").append(columnName).append(") references ")
+        .append(refTableName).append(" (").append(refColumnName).append(") ")
+        .append(platformDdl.getForeignKeyRestrict())
+        .endOfStatement();
+
+    String indexName = determineForeignKeyIndexName(tableName, columnName);
+
+    write.applyLast()
+        .append("create index ").append(indexName)
+        .append(" on ").append(tableName)
+        .append(" (").append(columnName).append(")")
+        .endOfStatement();
+
+    write.applyLast().end();
+
+    write.rollbackFirst()
+        .append("drop index ").append(indexName)
+        .endOfStatement();
+
+    write.rollbackFirst()
+        .append("alter table ").append(tableName)
+        .append(" drop constraint ").append(fkName)
+        .endOfStatement();
+
+    write.rollbackFirst().end();
+
+    //alter table o_address add constraint fk_o_address_country_1 foreign key (country_code) references o_country (code)
+    // on delete restrict on update restrict;
+    //create index ix_o_address_country_1 on o_address (country_code);
 
   }
+
 
   /**
    * Add 'drop table' statement to the buffer.
@@ -80,7 +137,7 @@ public class BaseTableDdl implements TableDdl {
     List<Column> columns = createTable.getColumn();
     for (Column column : columns) {
       String checkConstraint = column.getCheckConstraint();
-      if (!isEmpty(checkConstraint)) {
+      if (hasValue(checkConstraint)) {
         writeCheckConstraint(apply, createTable.getName(), column, checkConstraint);
       }
     }
@@ -98,6 +155,10 @@ public class BaseTableDdl implements TableDdl {
     buffer.append(" ").append(checkConstraint);
   }
 
+  protected void writeCompoundUniqueConstraints(DdlBuffer apply, CreateTable createTable) {
+    //TODO: Write compound unique constraints
+  }
+
   /**
    * Write the unique constraints inline with the create table statement.
    */
@@ -109,9 +170,6 @@ public class BaseTableDdl implements TableDdl {
         inlineUniqueConstraintSingle(apply, createTable.getName(), column);
       }
     }
-
-    //TODO: Write compound unique constraints
-
   }
 
   /**
@@ -170,15 +228,27 @@ public class BaseTableDdl implements TableDdl {
    */
   protected void writeColumnDefinition(DdlBuffer buffer, Column column) throws IOException {
 
+    String platformType = convertToPlatformType(column.getType(), isTrue(column.isIdentity()));
+
     buffer.append("  ");
     buffer.append(column.getName(), 30);
-    buffer.append(column.getType());
+    buffer.append(platformType);
     if (isTrue(column.isNotnull()) || isTrue(column.isPrimaryKey())) {
       buffer.append(" not null");
     }
 
     // add check constraints later as we really want to give them a nice name
     // so that the database can potentially provide a nice SQL error
+  }
+
+  /**
+   * Convert the expected logical type into a platform specific one.
+   * <p>
+   * For example clob -> text for postgres.
+   * </p>
+   */
+  protected String convertToPlatformType(String type, boolean identity) {
+    return platformDdl.convert(type, identity);
   }
 
   /**
@@ -192,6 +262,22 @@ public class BaseTableDdl implements TableDdl {
       pkColumnNames.add(pkColumns.get(i).getName());
     }
     return namingConvention.primaryKeyName(tableName, pkColumnNames);
+  }
+
+  /**
+   * Return the foreign key constraint name given a single column foreign key.
+   */
+  protected String determineForeignKeyConstraintName(String tableName, String columnName) {
+
+    return namingConvention.foreignKeyConstraintName(tableName, columnName);
+  }
+
+  /**
+   * Return the foreign key constraint name given a single column foreign key.
+   */
+  protected String determineForeignKeyIndexName(String tableName, String columnName) {
+
+    return namingConvention.foreignKeyIndexName(tableName, columnName);
   }
 
   /**
@@ -226,8 +312,8 @@ public class BaseTableDdl implements TableDdl {
   /**
    * Return true if null or trimmed string is empty.
    */
-  protected boolean isEmpty(String value) {
-    return value == null || value.trim().isEmpty();
+  protected boolean hasValue(String value) {
+    return value != null && !value.trim().isEmpty();
   }
 
   /**

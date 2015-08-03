@@ -14,6 +14,7 @@ public class MColumn {
   private String references;
   private boolean notnull;
   private boolean primaryKey;
+  private boolean identity;
   private boolean unique;
 
   public MColumn(Column column) {
@@ -24,6 +25,7 @@ public class MColumn {
     this.references = column.getReferences();
     this.notnull = Boolean.TRUE.equals(column.isNotnull());
     this.primaryKey = Boolean.TRUE.equals(column.isPrimaryKey());
+    this.identity = Boolean.TRUE.equals(column.isIdentity());
     this.unique = Boolean.TRUE.equals(column.isUnique());
   }
 
@@ -46,12 +48,20 @@ public class MColumn {
     return type;
   }
 
-  public Boolean getPrimaryKey() {
+  public boolean isPrimaryKey() {
     return primaryKey;
   }
 
-  public void setPrimaryKey(Boolean primaryKey) {
+  public void setPrimaryKey(boolean primaryKey) {
     this.primaryKey = primaryKey;
+  }
+
+  public boolean isIdentity() {
+    return identity;
+  }
+
+  public void setIdentity(boolean identity) {
+    this.identity = identity;
   }
 
   public String getCheckConstraint() {
@@ -103,10 +113,10 @@ public class MColumn {
     c.setCheckConstraint(checkConstraint);
     c.setUnique(unique);
     c.setPrimaryKey(primaryKey);
+    c.setIdentity(identity);
     c.setReferences(references);
     c.setDefaultValue(defaultValue);
 
-    //c.setForeignKeyConstraintName();
     //c.setDeleteCascade();
     //c.setDeferrable(deferrable);
 

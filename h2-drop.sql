@@ -2,6 +2,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists o_address;
 
+drop table if exists blob_holder;
+
 drop table if exists car_accessory;
 
 drop table if exists be_contact;
@@ -11,6 +13,8 @@ drop table if exists contact_note;
 drop table if exists o_country;
 
 drop table if exists be_customer;
+
+drop table if exists document;
 
 drop table if exists mrole;
 
@@ -38,6 +42,8 @@ SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists o_address_seq;
 
+drop sequence if exists blob_holder_seq;
+
 drop sequence if exists car_accessory_seq;
 
 drop sequence if exists be_contact_seq;
@@ -47,6 +53,8 @@ drop sequence if exists contact_note_seq;
 drop sequence if exists o_country_seq;
 
 drop sequence if exists be_customer_seq;
+
+drop sequence if exists document_seq;
 
 drop sequence if exists mrole_seq;
 

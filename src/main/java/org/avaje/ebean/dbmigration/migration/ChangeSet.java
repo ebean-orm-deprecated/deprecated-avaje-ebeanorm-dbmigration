@@ -56,7 +56,9 @@ public class ChangeSet {
         @XmlElement(name = "renameView", type = RenameView.class),
         @XmlElement(name = "addColumn", type = AddColumn.class),
         @XmlElement(name = "dropColumn", type = DropColumn.class),
-        @XmlElement(name = "renameColumn", type = RenameColumn.class)
+        @XmlElement(name = "renameColumn", type = RenameColumn.class),
+        @XmlElement(name = "addForeignKey", type = AddForeignKey.class),
+        @XmlElement(name = "dropForeignKey", type = DropForeignKey.class)
     })
     protected List<Object> changeSetChildren;
     @XmlAttribute(name = "id", required = true)
@@ -95,6 +97,8 @@ public class ChangeSet {
      * {@link AddColumn }
      * {@link DropColumn }
      * {@link RenameColumn }
+     * {@link AddForeignKey }
+     * {@link DropForeignKey }
      * 
      * 
      */

@@ -2,11 +2,10 @@ package org.avaje.ebean.dbmigration.model.build;
 
 
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.config.dbplatform.DbTypeMap;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import org.avaje.ebean.dbmigration.model.MTable;
 import org.avaje.ebean.dbmigration.model.ModelContainer;
-import org.avaje.ebean.dbmigration.model.visitor.BeanPropertyVisitor;
+import org.avaje.ebean.dbmigration.model.visitor.VisitAllUsing;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,12 +19,10 @@ public class ModelBuildBeanVisitorTest {
 
     ModelContainer model = new ModelContainer();
 
-    DbTypeMap dbTypeMap = defaultServer.getDatabasePlatform().getDbTypeMap();
-
-    ModelBuildContext ctx = new ModelBuildContext(dbTypeMap, model);
+    ModelBuildContext ctx = new ModelBuildContext(model);
     ModelBuildBeanVisitor addTable = new ModelBuildBeanVisitor(ctx);
 
-    new BeanPropertyVisitor(addTable, defaultServer).visitAllBeans();
+    new VisitAllUsing(addTable, defaultServer).visitAllBeans();
 
     MTable customer = model.getTable("be_customer");
 

@@ -10,7 +10,11 @@ public class DdlWrite {
 
   private final DdlBuffer apply;
 
-  private final DdlBuffer rollback;
+  private final DdlBuffer applyLast;
+
+  private final DdlBuffer rollbackFirst;
+
+  private final DdlBuffer rollbackLast;
 
   /**
    * Create without any configuration.
@@ -24,7 +28,9 @@ public class DdlWrite {
    */
   public DdlWrite(MConfiguration configuration) {
     this.apply = new BaseDdlBuffer(configuration);
-    this.rollback = new BaseDdlBuffer(configuration);
+    this.applyLast = new BaseDdlBuffer(configuration);
+    this.rollbackFirst = new BaseDdlBuffer(configuration);
+    this.rollbackLast = new BaseDdlBuffer(configuration);
   }
 
   /**
@@ -35,10 +41,31 @@ public class DdlWrite {
   }
 
   /**
+   * Return the buffer that APPLY DDL is written to.
+   * <p>
+   * Statements added to this buffer are executed after all the normal
+   * apply statements and typically 'add foreign key' is added to this buffer.
+   */
+  public DdlBuffer applyLast() {
+    return applyLast;
+  }
+
+  /**
    * Return the buffer that ROLLBACK DDL is written to.
    */
-  public DdlBuffer rollback() {
-    return rollback;
+  public DdlBuffer rollbackFirst() {
+    return rollbackFirst;
   }
+
+  /**
+   * Return the buffer that ROLLBACK DDL is written to.
+   * <p>
+   * Statements added to this rollback buffer are executed before normal
+   * rollback such as deleting foreign key constraints.
+   */
+  public DdlBuffer rollbackLast() {
+    return rollbackLast;
+  }
+
 
 }

@@ -7,7 +7,7 @@ import com.avaje.ebeaninternal.server.deploy.InheritInfo;
 import org.avaje.ebean.dbmigration.model.MColumn;
 import org.avaje.ebean.dbmigration.model.MTable;
 import org.avaje.ebean.dbmigration.model.visitor.BeanVisitor;
-import org.avaje.ebean.dbmigration.model.visitor.PropertyVisitor;
+import org.avaje.ebean.dbmigration.model.visitor.BeanPropertyVisitor;
 
 /**
  * Used to build the Model objects MTable etc.
@@ -27,7 +27,7 @@ public class ModelBuildBeanVisitor implements BeanVisitor {
    *   This creates an MTable and adds it to the model.
    * </p>
    */
-  public PropertyVisitor visitBean(BeanDescriptor<?> descriptor) {
+  public BeanPropertyVisitor visitBean(BeanDescriptor<?> descriptor) {
 
     if (!descriptor.isInheritanceRoot()) {
       return null;

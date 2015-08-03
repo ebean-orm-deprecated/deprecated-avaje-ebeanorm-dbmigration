@@ -9,7 +9,7 @@ import com.avaje.ebeaninternal.server.deploy.BeanPropertyCompound;
  * Used to help mark PropertyVisitor methods that need to be implemented
  * to visit base table properties.
  */
-public abstract class BaseTablePropertyVisitor implements PropertyVisitor {
+public abstract class BaseTablePropertyVisitor implements BeanPropertyVisitor {
 
   /**
    * Not required in that you can use the visitEmbeddedScalar.

@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import com.avaje.ebean.annotation.Index;
 import org.example.domain.finder.CustomerFinder;
 
 import javax.persistence.CascadeType;
@@ -25,7 +26,8 @@ public class Customer extends BaseModel {
   public static final CustomerFinder find = new CustomerFinder();
   
   boolean inactive;
-  
+
+  @Index(value = "idx_customer_name")
   @Column(length=100, unique = true)
   String name;
 

@@ -79,6 +79,7 @@ public class ModelDiff {
   protected void addNewTable(MTable newTable) {
 
     createChanges.add(newTable.createTable());
+//    createChanges.add(newTable.createForeignKeys());
   }
 
   /**

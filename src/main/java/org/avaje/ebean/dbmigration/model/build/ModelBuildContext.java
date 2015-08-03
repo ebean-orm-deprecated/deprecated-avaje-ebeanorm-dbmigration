@@ -7,62 +7,59 @@ import com.avaje.ebeaninternal.server.type.ScalarType;
 import org.avaje.ebean.dbmigration.model.MTable;
 import org.avaje.ebean.dbmigration.model.ModelContainer;
 
-import java.sql.Types;
-
 /**
  * The context used during DDL generation.
  */
 public class ModelBuildContext {
 
-	/**
-	 * Used to map bean types to DB specific types.
-	 */
-	private final DbTypeMap dbTypeMap;
+  /**
+   * Use platform agnostic logical types. These types are converted to
+   * platform specific types in the DDL generation.
+   */
+  private final DbTypeMap dbTypeMap = DbTypeMap.logicalTypes();
 
   private final ModelContainer model;
 
-	public ModelBuildContext(DbTypeMap dbTypeMap, ModelContainer model){
-		this.dbTypeMap = dbTypeMap;
+  public ModelBuildContext(ModelContainer model) {
     this.model = model;
-	}
+  }
 
   public void addTable(MTable table) {
     model.addTable(table);
   }
 
-	/**
-	 * Return the map used to determine the DB specific type
-	 * for a given bean property.
-	 */
-	public DbTypeMap getDbTypeMap() {
-		return dbTypeMap;
-	}
+  /**
+   * Return the map used to determine the DB specific type
+   * for a given bean property.
+   */
+  public DbTypeMap getDbTypeMap() {
+    return dbTypeMap;
+  }
 
 
-	public String getColumnDefn(BeanProperty p) {
-		DbType dbType = getDbType(p);
-		return p.renderDbType(dbType);
-	}
+  public String getColumnDefn(BeanProperty p) {
+    DbType dbType = getDbType(p);
+    if (dbType == null) {
+      throw new IllegalStateException("Unknown DbType mapping for " + p.getFullBeanName());
+    }
+    return p.renderDbType(dbType);
+  }
 
-	private DbType getDbType(BeanProperty p) {
+  private DbType getDbType(BeanProperty p) {
 
-		ScalarType<?> scalarType = p.getScalarType();
-		if (scalarType == null) {
-			throw new RuntimeException("No scalarType for " + p.getFullBeanName());
-		}
+    if (p.isDbEncrypted()) {
+      return dbTypeMap.get(p.getDbEncryptedType());
+    }
 
-		if (p.isDbEncrypted()){
-		    return dbTypeMap.get(p.getDbEncryptedType());
-		}
-		
-		int jdbcType = scalarType.getJdbcType();
-		if (p.isLob() && jdbcType == Types.VARCHAR){
-			// workaround for Postgres TEXT type which is 
-			// VARCHAR in jdbc API but TEXT in ddl
-			jdbcType = Types.CLOB;
-		}
-		return dbTypeMap.get(jdbcType);
-	}
-
+    int dbType = p.getDbType();
+    if (dbType == 0) {
+//      ScalarType<Object> scalarType = p.getScalarType();
+//      if (scalarType == null) {
+        throw new RuntimeException("No scalarType for " + p.getFullBeanName());
+//      }
+//      dbType = scalarType.getJdbcType();
+    }
+    return dbTypeMap.get(dbType);
+  }
 
 }

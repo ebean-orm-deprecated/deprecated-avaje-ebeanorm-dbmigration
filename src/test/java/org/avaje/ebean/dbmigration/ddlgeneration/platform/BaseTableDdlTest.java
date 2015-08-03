@@ -1,6 +1,7 @@
 package org.avaje.ebean.dbmigration.ddlgeneration.platform;
 
 
+import com.avaje.ebean.config.dbplatform.DbTypeMap;
 import org.avaje.ebean.dbmigration.ddlgeneration.DdlWrite;
 import org.avaje.ebean.dbmigration.ddlgeneration.Helper;
 import org.avaje.ebean.dbmigration.migration.Column;
@@ -17,18 +18,23 @@ public class BaseTableDdlTest {
   @Test
   public void testGenerate() throws Exception {
 
-
-    DdlNamingConvention namingConvention = new DdlNamingConvention();
-    BaseTableDdl ddlGen = new BaseTableDdl(namingConvention);
+    BaseTableDdl ddlGen = new BaseTableDdl(new DdlNamingConvention(), new PlatformDdl(new DbTypeMap()));
 
     DdlWrite write = new DdlWrite();
 
 
     ddlGen.generate(write, createTable());
     String apply = write.apply().getBuffer();
+    String applyLast = write.applyLast().getBuffer();
 
-    String expected = Helper.asText(this, "/assert/BaseTableDdlTest/createTable.txt");
-    assertThat(apply).isEqualTo(expected);
+    String rollbackFirst = write.rollbackFirst().getBuffer();
+    String rollbackLast = write.rollbackLast().getBuffer();
+
+    assertThat(apply).isEqualTo( Helper.asText(this, "/assert/BaseTableDdlTest/createTable-apply.txt"));
+    assertThat(applyLast).isEqualTo( Helper.asText(this, "/assert/BaseTableDdlTest/createTable-applyLast.txt"));
+    assertThat(rollbackFirst).isEqualTo( Helper.asText(this, "/assert/BaseTableDdlTest/createTable-rollbackFirst.txt"));
+    assertThat(rollbackLast).isEqualTo( Helper.asText(this, "/assert/BaseTableDdlTest/createTable-rollback.txt"));
+
 
   }
 
@@ -50,6 +56,14 @@ public class BaseTableDdlTest {
     col2.setCheckConstraint("check (status in ('A','B'))");
 
     columns.add(col2);
+
+    Column col3 = new Column();
+    col3.setName("order_id");
+    col3.setType("integer");
+    col3.setNotnull(true);
+    col3.setReferences("orders.id");
+
+    columns.add(col3);
 
     return createTable;
   }

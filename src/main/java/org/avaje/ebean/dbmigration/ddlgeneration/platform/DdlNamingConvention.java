@@ -12,6 +12,14 @@ public class DdlNamingConvention {
   protected String pkPrefix = "pk_";
   protected String pkSuffix = "";
 
+  protected String fkPrefix = "fk_";
+  protected String fkMiddle = "_";
+  protected String fkSuffix = "";
+
+  protected String fkIndexPrefix = "ix_";
+  protected String fkIndexMiddle = "_";
+  protected String fkIndexSuffix = "";
+
   protected String uqPrefix = "uq_";
   protected String uqSuffix = "";
 
@@ -26,6 +34,20 @@ public class DdlNamingConvention {
   public String primaryKeyName(String tableName, List<String> pkColumns) {
 
     return pkPrefix + normalise(tableName) + pkSuffix;
+  }
+
+  /**
+   * Return the foreign key constraint name given a single column foreign key.
+   */
+  public String foreignKeyConstraintName(String tableName, String columnName) {
+    return fkPrefix + normalise(tableName) + fkMiddle + normalise(columnName) + fkSuffix;
+  }
+
+  /**
+   * Return the index name associated with a foreign key constraint given a single column foreign key.
+   */
+  public String foreignKeyIndexName(String tableName, String columnName) {
+    return fkIndexPrefix + normalise(tableName) + fkIndexMiddle + normalise(columnName) + fkIndexSuffix;
   }
 
   /**

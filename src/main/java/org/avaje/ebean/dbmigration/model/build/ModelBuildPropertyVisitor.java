@@ -85,6 +85,10 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
       String columnDefn = ctx.getColumnDefn(importedProperty);
 
       MColumn col = new MColumn(dbCol, columnDefn, !p.isNullable());
+      String refColumn = importedProperty.getDbColumn();
+      String refTable = importedProperty.getBeanDescriptor().getBaseTable();
+
+      col.setReferences(refTable+"."+refColumn);
       modelColumns.add(col);
       table.addColumn(col);
     }
@@ -110,6 +114,9 @@ public class ModelBuildPropertyVisitor extends BaseTablePropertyVisitor {
 
 		if (p.isId()){
       col.setPrimaryKey(true);
+      if (p.getBeanDescriptor().isUseIdGenerator()) {
+        col.setIdentity(true);
+      }
 		} else if (!p.isNullable() || p.isDDLNotNull()) {
       col.setNotnull(true);
 		}

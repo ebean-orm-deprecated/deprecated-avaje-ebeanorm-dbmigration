@@ -25,7 +25,7 @@ public class BaseColumnDdl implements ColumnDdl {
       alterTableAddColumn(writer.apply(), tableName, column);
 
       // rollback
-      alterTableDropColumn(writer.rollback(), tableName, column.getName());
+      alterTableDropColumn(writer.rollbackLast(), tableName, column.getName());
     }
   }
 
@@ -56,14 +56,14 @@ public class BaseColumnDdl implements ColumnDdl {
     if (Boolean.TRUE.equals(column.isNotnull())) {
       buffer.append(" not null");
     }
-    if (!isEmpty(column.getCheckConstraint())) {
+    if (hasValue(column.getCheckConstraint())) {
       buffer.append(" ").append(column.getCheckConstraint());
     }
     buffer.endOfStatement().end();
   }
 
 
-  protected boolean isEmpty(String value) {
-    return value == null || value.trim().isEmpty();
+  protected boolean hasValue(String value) {
+    return value != null && !value.trim().isEmpty();
   }
 }

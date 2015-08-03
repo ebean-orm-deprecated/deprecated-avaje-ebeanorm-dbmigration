@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;attGroup ref="{http://ebean-orm.github.io/xml/ns/dbmigration}column"/>
- *       &lt;attGroup ref="{http://ebean-orm.github.io/xml/ns/dbmigration}columnConstraintAttributes"/>
+ *       &lt;attGroup ref="{http://ebean-orm.github.io/xml/ns/dbmigration}columnAttributes"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -50,18 +50,12 @@ public class Column {
     protected String checkConstraint;
     @XmlAttribute(name = "unique")
     protected Boolean unique;
-    @XmlAttribute(name = "uniqueConstraintName")
-    protected String uniqueConstraintName;
     @XmlAttribute(name = "primaryKey")
     protected Boolean primaryKey;
-    @XmlAttribute(name = "primaryKeyName")
-    protected String primaryKeyName;
-    @XmlAttribute(name = "primaryKeyTablespace")
-    protected String primaryKeyTablespace;
+    @XmlAttribute(name = "identity")
+    protected Boolean identity;
     @XmlAttribute(name = "references")
     protected String references;
-    @XmlAttribute(name = "foreignKeyConstraintName")
-    protected String foreignKeyConstraintName;
     @XmlAttribute(name = "deleteCascade")
     protected Boolean deleteCascade;
     @XmlAttribute(name = "deferrable")
@@ -262,30 +256,6 @@ public class Column {
     }
 
     /**
-     * Gets the value of the uniqueConstraintName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUniqueConstraintName() {
-        return uniqueConstraintName;
-    }
-
-    /**
-     * Sets the value of the uniqueConstraintName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUniqueConstraintName(String value) {
-        this.uniqueConstraintName = value;
-    }
-
-    /**
      * Gets the value of the primaryKey property.
      * 
      * @return
@@ -310,51 +280,27 @@ public class Column {
     }
 
     /**
-     * Gets the value of the primaryKeyName property.
+     * Gets the value of the identity property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public String getPrimaryKeyName() {
-        return primaryKeyName;
+    public Boolean isIdentity() {
+        return identity;
     }
 
     /**
-     * Sets the value of the primaryKeyName property.
+     * Sets the value of the identity property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public void setPrimaryKeyName(String value) {
-        this.primaryKeyName = value;
-    }
-
-    /**
-     * Gets the value of the primaryKeyTablespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPrimaryKeyTablespace() {
-        return primaryKeyTablespace;
-    }
-
-    /**
-     * Sets the value of the primaryKeyTablespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPrimaryKeyTablespace(String value) {
-        this.primaryKeyTablespace = value;
+    public void setIdentity(Boolean value) {
+        this.identity = value;
     }
 
     /**
@@ -379,30 +325,6 @@ public class Column {
      */
     public void setReferences(String value) {
         this.references = value;
-    }
-
-    /**
-     * Gets the value of the foreignKeyConstraintName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getForeignKeyConstraintName() {
-        return foreignKeyConstraintName;
-    }
-
-    /**
-     * Sets the value of the foreignKeyConstraintName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setForeignKeyConstraintName(String value) {
-        this.foreignKeyConstraintName = value;
     }
 
     /**

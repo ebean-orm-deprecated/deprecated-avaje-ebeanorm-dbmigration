@@ -198,12 +198,32 @@
     </xsd:complexType>
   </xsd:element>
 
+  <!-- FOREIGN KEY -->
+
+  <xsd:element name="addForeignKey">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="name" type="xsd:string" use="required"/>
+          <xsd:attribute name="columns" type="xsd:string" use="required"/>
+          <xsd:attribute name="references" type="xsd:string" use="required"/>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="dropForeignKey">
+    <xsd:complexType mixed="true">
+      <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
   <!-- ============================================ -->
 
   <xsd:element name="column">
     <xsd:complexType mixed="true">
       <xsd:attributeGroup ref="column"/>
-      <xsd:attributeGroup ref="columnConstraintAttributes"/>
+      <xsd:attributeGroup ref="columnAttributes"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -213,16 +233,17 @@
     <xsd:attribute name="remarks" type="xsd:string"/>
   </xsd:attributeGroup>
 
-  <xsd:attributeGroup name="columnConstraintAttributes">
+  <xsd:attributeGroup name="columnAttributes">
     <xsd:attribute name="notnull" type="xsd:boolean"/>
     <xsd:attribute name="checkConstraint" type="xsd:string"/>
     <xsd:attribute name="unique" type="xsd:boolean"/>
-    <xsd:attribute name="uniqueConstraintName" type="xsd:string"/>
     <xsd:attribute name="primaryKey" type="xsd:boolean"/>
-    <xsd:attribute name="primaryKeyName" type="xsd:string"/>
-    <xsd:attribute name="primaryKeyTablespace" type="xsd:string"/>
+    <xsd:attribute name="identity" type="xsd:boolean"/>
     <xsd:attribute name="references" type="xsd:string"/>
-    <xsd:attribute name="foreignKeyConstraintName" type="xsd:string"/>
+    <!--<xsd:attribute name="primaryKeyTablespace" type="xsd:string"/>-->
+    <!--<xsd:attribute name="uniqueConstraintName" type="xsd:string"/>-->
+    <!--<xsd:attribute name="primaryKeyName" type="xsd:string"/>-->
+    <!--<xsd:attribute name="foreignKeyConstraintName" type="xsd:string"/>-->
     <xsd:attribute name="deleteCascade" type="xsd:boolean"/>
     <xsd:attribute name="deferrable" type="xsd:boolean"/>
     <xsd:attribute name="initiallyDeferred" type="xsd:boolean"/>
@@ -256,6 +277,9 @@
       <xsd:element ref="dropColumn" maxOccurs="unbounded"/>
       <xsd:element ref="renameColumn" maxOccurs="unbounded"/>
 
+      <xsd:element ref="addForeignKey" maxOccurs="unbounded"/>
+      <xsd:element ref="dropForeignKey" maxOccurs="unbounded"/>
+
       <!--<xsd:element ref="createIndex" maxOccurs="unbounded"/>-->
       <!--<xsd:element ref="dropIndex" maxOccurs="unbounded"/>-->
 
@@ -266,8 +290,6 @@
       <!--<xsd:element ref="addNotNullConstraint" maxOccurs="unbounded"/>-->
       <!--<xsd:element ref="dropNotNullConstraint" maxOccurs="unbounded"/>-->
 
-      <!--<xsd:element ref="addForeignKeyConstraint" maxOccurs="unbounded"/>-->
-      <!--<xsd:element ref="dropForeignKeyConstraint" maxOccurs="unbounded"/>-->
 
       <!--<xsd:element ref="addPrimaryKey" maxOccurs="unbounded"/>-->
       <!--<xsd:element ref="dropPrimaryKey" maxOccurs="unbounded"/>-->

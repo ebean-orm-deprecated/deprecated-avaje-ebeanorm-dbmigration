@@ -10,6 +10,15 @@ create table o_address (
   constraint pk_o_address primary key (id))
 ;
 
+create table blob_holder (
+  id                        bigint not null,
+  text_content              clob,
+  binary_content            blob,
+  file_content              blob,
+  version                   bigint not null,
+  constraint pk_blob_holder primary key (id))
+;
+
 create table car_accessory (
   id                        bigint not null,
   name                      varchar(255),
@@ -63,6 +72,15 @@ create table be_customer (
   when_modified             timestamp not null,
   constraint uq_be_customer_name unique (name),
   constraint pk_be_customer primary key (id))
+;
+
+create table document (
+  id                        bigint not null,
+  title                     varchar(255),
+  author                    varchar(255),
+  content                   clob,
+  version                   bigint not null,
+  constraint pk_document primary key (id))
 ;
 
 create table mrole (
@@ -164,6 +182,8 @@ create table mrole_muser (
 ;
 create sequence o_address_seq;
 
+create sequence blob_holder_seq;
+
 create sequence car_accessory_seq;
 
 create sequence be_contact_seq;
@@ -173,6 +193,8 @@ create sequence contact_note_seq;
 create sequence o_country_seq;
 
 create sequence be_customer_seq;
+
+create sequence document_seq;
 
 create sequence mrole_seq;
 
@@ -228,3 +250,4 @@ create index ix_vehicle_carRef_14 on vehicle (car_ref_id);
 alter table mrole_muser add constraint fk_mrole_muser_mrole_01 foreign key (mrole_id) references mrole (id) on delete restrict on update restrict;
 
 alter table mrole_muser add constraint fk_mrole_muser_muser_02 foreign key (muser_id) references muser (id) on delete restrict on update restrict;
+create index idx_customer_name on be_customer(name);

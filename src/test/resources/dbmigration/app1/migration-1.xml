@@ -48,6 +48,8 @@
 
     <createHistoryTable baseTable="hello_world"/>
 
+    <addForeignKey name="fk_hello_world_x" columns="x" references="asdsad.asd"/>
+
   </changeSet>
 
 </migration>

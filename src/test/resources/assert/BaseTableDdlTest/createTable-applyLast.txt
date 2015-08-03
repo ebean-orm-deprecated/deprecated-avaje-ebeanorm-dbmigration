@@ -1,0 +1,1 @@
+alter table mytable add constraint fk_mytable_order_id (order_id) references orders (id) on delete restrict on update restrict;
